@@ -33,7 +33,7 @@ brew install https://gist.githubusercontent.com/DDRBoxman/9c7a2b08933166f4b61ed9
 if [ -d "$(brew --cellar)/swig" ]; then
     brew unlink swig
 fi
-brew install https://gist.githubusercontent.com/DDRBoxman/4cada55c51803a2f963fa40ce55c9d3e/raw/572c67e908bfbc1bcb8c476ea77ea3935133f5b5/swig.rb
+brew install https://gist.githubusercontent.com/DDRBoxman/4cada55c51803a2f963fa40ce55c9d3e/raw/572c67e908bfbc1bcb8c476ea77ea3935133f5b5/swig.rb, link: true
 
 pip install dmgbuild
 
@@ -55,7 +55,11 @@ hr "Downloading Sparkle framework"
 wget --quiet --retry-connrefused --waitretry=1 -O sparkle.tar.bz2 https://github.com/sparkle-project/Sparkle/releases/download/1.23.0/Sparkle-1.23.0.tar.bz2
 mkdir ./sparkle
 tar -xf ./sparkle.tar.bz2 -C ./sparkle
-sudo cp -R ./sparkle/Sparkle.framework /Library/Frameworks/Sparkle.framework
+if [ -d "/Library/Frameworks/Sparkle.framework" ]; then
+  echo "Sparkle.framework is already installed. Skipping ..."
+else
+  sudo cp -R ./sparkle/Sparkle.framework /Library/Frameworks/Sparkle.framework
+fi
 
 # CEF Stuff
 hr "Downloading CEF"

@@ -4,6 +4,26 @@ hr() {
   echo "───────────────────────────────────────────────────"
 }
 
+relocate() {
+	src=./rundir/RelWithDebInfo/data/obs-scripting/$1
+	dest=./rundir/RelWithDebInfo/bin/$1
+	if [ -f "$src" ]; then
+		if [ -f "$dest" ]; then
+			echo "Removing existing $dest binary ..."
+			rm $dest
+		fi
+		echo "Updating $1 module ..."
+		mv $src $dest
+	else
+		if [ -f "$dest" ]; then
+			echo "$1 is already relocated properly"
+		else
+			echo "Relocating $src to $dest"
+			mv $src $dest
+		fi
+	fi
+}
+
 # Exit if something fails
 set -e
 
@@ -19,12 +39,12 @@ cd ./build
 
 # Move obslua
 hr "Moving OBS LUA"
-mv ./rundir/RelWithDebInfo/data/obs-scripting/obslua.so ./rundir/RelWithDebInfo/bin/
+relocate obslua.so
 
 # Move obspython
 hr "Moving OBS Python"
-mv ./rundir/RelWithDebInfo/data/obs-scripting/_obspython.so ./rundir/RelWithDebInfo/bin/
-mv ./rundir/RelWithDebInfo/data/obs-scripting/obspython.py ./rundir/RelWithDebInfo/bin/
+relocate _obspython.so 
+relocate obspython.py
 
 # Package everything into a nice .app
 hr "Packaging .app"
@@ -77,7 +97,7 @@ plutil -insert SUPublicDSAKeyFile -string OBSPublicDSAKey.pem ./OBS.app/Contents
 
 dmgbuild -s ../CI/install/osx/settings.json "OBS" obs.dmg
 
-if [ -v "$TRAVIS" ]; then
+if [[ $TRAVIS ]]; then
 	# Signing stuff
 	hr "Decrypting Cert"
 	openssl aes-256-cbc -K $encrypted_dd3c7f5e9db9_key -iv $encrypted_dd3c7f5e9db9_iv -in ../CI/osxcert/Certificates.p12.enc -out Certificates.p12 -d
@@ -95,6 +115,8 @@ fi
 cp ./OBS.dmg ./$FILENAME
 
 # Move to the folder that travis uses to upload artifacts from
+if [ ! -d ../nightly ]; then
+	mkdir ../nightly
+fi
 hr "Moving package to nightly folder for distribution"
-mkdir ../nightly
 sudo mv ./$FILENAME ../nightly
