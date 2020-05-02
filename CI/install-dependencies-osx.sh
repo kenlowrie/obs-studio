@@ -4,6 +4,9 @@ hr() {
   echo "───────────────────────────────────────────────────"
 }
 
+[ ${CEF_BUILD_VERSION:?is not defined. Use 'source devset.sh' to define it.} ]
+[ ${build_config:?is not defined. Use 'source devset.sh' to define it.} ]
+
 # Exit if something fails
 set -e
 
@@ -33,7 +36,8 @@ brew install https://gist.githubusercontent.com/DDRBoxman/9c7a2b08933166f4b61ed9
 if [ -d "$(brew --cellar)/swig" ]; then
     brew unlink swig
 fi
-brew install https://gist.githubusercontent.com/DDRBoxman/4cada55c51803a2f963fa40ce55c9d3e/raw/572c67e908bfbc1bcb8c476ea77ea3935133f5b5/swig.rb, link: true
+brew install https://gist.githubusercontent.com/DDRBoxman/4cada55c51803a2f963fa40ce55c9d3e/raw/572c67e908bfbc1bcb8c476ea77ea3935133f5b5/swig.rb
+brew link swig
 
 pip install dmgbuild
 
