@@ -1,3 +1,6 @@
+[ ${CEF_BUILD_VERSION:?is not defined. Use 'source devset.sh' to define it.} ]
+[ ${build_config:?is not defined. Use 'source devset.sh' to define it.} ]
+
 # Exit if something fails
 set -e
 
@@ -9,10 +12,10 @@ mkdir OBS.app/Contents/MacOS
 mkdir OBS.app/Contents/PlugIns
 mkdir OBS.app/Contents/Resources
 
-cp -R rundir/RelWithDebInfo/bin/ ./OBS.app/Contents/MacOS
-cp -R rundir/RelWithDebInfo/data ./OBS.app/Contents/Resources
+cp -R rundir/${build_config}/bin/ ./OBS.app/Contents/MacOS
+cp -R rundir/${build_config}/data ./OBS.app/Contents/Resources
 cp ../CI/install/osx/obs.icns ./OBS.app/Contents/Resources
-cp -R rundir/RelWithDebInfo/obs-plugins/ ./OBS.app/Contents/PlugIns
+cp -R rundir/${build_config}/obs-plugins/ ./OBS.app/Contents/PlugIns
 cp ../CI/install/osx/Info.plist ./OBS.app/Contents
 
 ../CI/install/osx/dylibBundler -b -cd -d ./OBS.app/Contents/Frameworks -p @executable_path/../Frameworks/ \
@@ -41,6 +44,7 @@ cp ../CI/install/osx/Info.plist ./OBS.app/Contents
 -x ./OBS.app/Contents/MacOS/_obspython.so \
 -x ./OBS.app/Contents/PlugIns/obs-x264.so \
 -x ./OBS.app/Contents/PlugIns/text-freetype2.so \
+-x ./OBS.app/Contents/PlugIns/obs-mac-virtualcam.so \
 -x ./OBS.app/Contents/PlugIns/obs-libfdk.so
 # -x ./OBS.app/Contents/PlugIns/obs-outputs.so \
 

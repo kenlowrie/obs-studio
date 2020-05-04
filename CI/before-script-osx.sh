@@ -1,3 +1,6 @@
+[ ${CEF_BUILD_VERSION:?is not defined. Use 'source devset.sh' to define it.} ]
+[ ${build_config:?is not defined. Use 'source devset.sh' to define it.} ]
+
 # Make sure ccache is found
 export PATH=/usr/local/opt/ccache/libexec:$PATH
 
@@ -14,4 +17,6 @@ cmake -DENABLE_SPARKLE_UPDATER=ON \
 -DBROWSER_DEPLOY=ON \
 -DBUILD_CAPTIONS=ON \
 -DWITH_RTMPS=ON \
--DCEF_ROOT_DIR=$PWD/../../cef_binary_${CEF_BUILD_VERSION}_macosx64 ..
+-DCEF_ROOT_DIR=$PWD/../../cef_binary_${CEF_BUILD_VERSION}_macosx64 \
+${xcode_flags} \
+..

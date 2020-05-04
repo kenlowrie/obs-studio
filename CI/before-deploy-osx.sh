@@ -1,3 +1,6 @@
+[ ${CEF_BUILD_VERSION:?is not defined. Use 'source devset.sh' to define it.} ]
+[ ${build_config:?is not defined. Use 'source devset.sh' to define it.} ]
+
 hr() {
   echo "───────────────────────────────────────────────────"
   echo $1
@@ -5,8 +8,8 @@ hr() {
 }
 
 relocate() {
-	src=./rundir/RelWithDebInfo/data/obs-scripting/$1
-	dest=./rundir/RelWithDebInfo/bin/$1
+	src=./rundir/${build_config}/data/obs-scripting/$1
+	dest=./rundir/${build_config}/bin/$1
 	if [ -f "$src" ]; then
 		if [ -f "$dest" ]; then
 			echo "Removing existing $dest binary ..."
